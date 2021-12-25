@@ -3,9 +3,11 @@
         <v-img
             src="~@/assets/img.png"
             gradient="to top, rgba(0, 0, 1, 0), rgba(0, 0, 0, 0.33)"
-            max-height="380px"
+            max-height="340px"
+            min-height="340px"
+            height="340px"
         >
-            <div class="fill-height mt-0 mt-md-n15 d-flex mx-auto">
+            <div class="fill-height mt-0 d-flex mx-auto">
                 <v-row
                     justify="center"
                     align="center"
@@ -16,8 +18,10 @@
                             <div class="banner-title font-weight-black white--text">
                                 MCBE MOTD
                             </div>
-                            <p class="pt-5 white--text subtitle-2">随时随地查看你的服务器信息</p>
-                            <a class="github-button" href="https://github.com/BlackBEDevelopment/Minecraft-BedrockEdition-Server-Motd" data-size="large" data-show-count="true" aria-label="Star BlackBEDevelopment/Minecraft-BedrockEdition-Server-Motd on GitHub">Star</a>
+                            <p class="pt-5 white--text subtitle-2">我的世界基岩版服务器实时状态，随时随地查看你的服务器信息，提供众多展示接口并开放全部源代码。</p>
+                            <div class="text-center">
+                                <gh-btns-star slug="BlackBEDevelopment/Minecraft-BedrockEdition-Server-Motd" show-count></gh-btns-star>
+                            </div>
                         </div>
                     </v-col>
                 </v-row>
@@ -26,7 +30,7 @@
         </v-img>
 
         <v-main style="min-height: 60%">
-            <v-container style="margin-top: -76px">
+            <v-container style="margin-top: -59px">
                 <v-row
                     justify="center"
                 >
@@ -46,13 +50,14 @@
                                                     width="80"
                                                     src="@/assets/pm.png"
                                                     lazy-src="@/assets/pm.png"
-                                                    :aspect-ratio="1"></v-img>
+                                                    :aspect-ratio="1"
+                                                ></v-img>
                                             </v-card>
                                             <div class="ml-4">
-                                                <h2 class="title" v-html="color_replace(this.query.motd)"></h2>
+                                                <h2 class="title" v-html="color_replace(this.query_data.motd)"></h2>
                                                 <div class="text-subtitle-1">
                                                     <v-icon size="16">mdi-server</v-icon>
-                                                    {{ this.query.host }}
+                                                    {{ this.query_data.host }}
                                                 </div>
                                             </div>
                                         </div>
@@ -61,7 +66,7 @@
                                         class="pt-4"
                                     >
                                         <v-btn
-                                            v-for="item in this.query"
+                                            v-for="item in this.query_data"
                                             small
                                             depressed
                                             tile
@@ -88,19 +93,27 @@
                             </v-card-title>
 
                             <v-card-text>
-                                <v-row>
-                                    <v-col cols="7">
+                                <v-row dense>
+                                    <v-col cols="12" md="7">
                                         <v-text-field
                                             label="Server IP Address"
+                                            outlined
+                                            clearable
+                                            dense
+                                            v-model="this.input.ip"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col cols="5">
-                                        <div>
-                                            <span>:</span>
-                                            <v-text-field
-                                                label="Server Port"
-                                            ></v-text-field>
-                                        </div>
+                                    <v-col md="1" class="text-center align-center hidden-sm-and-down colon" >
+                                        <span>:</span>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            outlined
+                                            clearable
+                                            dense
+                                            label="Server Port"
+                                            v-model="this.input.port"
+                                        ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-btn block color="primary">查询</v-btn>
@@ -153,18 +166,14 @@
     </v-app>
 </template>
 
-<style>
-.banner-title {
-    font-size: clamp(1rem, 1rem + 5vw, 3rem);
-}
-</style>
+
 <script>
 import axios from "axios";
 
 export default {
     name: 'App',
     data: () => ({
-        query: {
+        query_data: {
             status: "online",
             host: "nyan.xyz:19132",
             motd: "§3欢迎加入 §eN§2y§4a§6n§2服§4务§6器§e",
@@ -175,6 +184,10 @@ export default {
             level_name: "PocketMine-MP",
             gamemode: "Survival",
             delay: 12
+        },
+        input: {
+            ip: 'nyancat.xyz',
+            port: 19132
         }
     }),
     created() {
@@ -227,3 +240,24 @@ export default {
     }
 };
 </script>
+
+
+<style>
+@import "~@mdi/font/css/materialdesignicons.min.css";
+@import "~vue-github-buttons/dist/vue-github-buttons.min.css";
+.banner-title {
+    font-size: clamp(1rem, 1rem + 5vw, 3rem);
+}
+.gh-button-container{
+    float: none!important;
+}
+.colon {
+    font-weight: 600 !important;
+    font-size: 30px;
+    margin-top: 7px;
+    color: lightgrey
+}
+.colon:hover {
+    color: black;
+}
+</style>

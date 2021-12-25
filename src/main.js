@@ -10,11 +10,12 @@ import App from './App.vue';
 // import router from './router';
 // import store from './store';
 import vuetify from './plugins/vuetify';
-import './plugins/buttons';
+// import './plugins/buttons';
+import VueGitHubButtons from 'vue-github-buttons';
 
 Vue.config.productionTip = false;
 
-
+Vue.use(VueGitHubButtons, { useCache: true });
 const app = new Vue({
   // router,
   // store,
