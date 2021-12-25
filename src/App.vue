@@ -25,7 +25,7 @@
             </div>
         </v-img>
 
-        <v-main>
+        <v-main style="min-height: 60%">
             <v-container style="margin-top: -76px">
                 <v-row
                     justify="center"
@@ -95,23 +95,61 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="5">
-                                        <span>:</span>
-                                        <v-text-field
-                                            label="Server Port"
-                                        ></v-text-field>
+                                        <div>
+                                            <span>:</span>
+                                            <v-text-field
+                                                label="Server Port"
+                                            ></v-text-field>
+                                        </div>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-btn block color="primary">查询</v-btn>
                                     </v-col>
                                 </v-row>
-
-
                             </v-card-text>
                         </v-card>
                     </v-col>
                 </v-row>
             </v-container>
         </v-main>
+        <v-footer
+            padless
+        >
+            <v-card
+                tile
+                class="text-center"
+                width="100%"
+            >
+                <v-card-text>
+                    本项目由 BlackBE 云黑团队开发维护，BlakcBE云黑平台致力于维护服务器游戏平衡。
+                    <br>
+                    <v-btn
+                        class="mx-4"
+                        icon
+                        href="https://github.com/blackbedevlopment "
+                        target="_blank"
+                    >
+                        <v-icon size="24px">
+                            mdi-github
+                        </v-icon>
+                    </v-btn>
+                    <v-btn
+                        class="mx-4"
+                        icon
+                        href="#"
+                        target="_blank"
+                    >
+                        <v-icon size="24px">
+                            mdi-email
+                        </v-icon>
+                    </v-btn>
+                    <p>
+                        Copyright &copy {{ new Date().getFullYear() }} <strong>BlackBEDevelopment</strong> All Right Reserved.
+                    </p>
+                </v-card-text>
+
+            </v-card>
+        </v-footer>
     </v-app>
 </template>
 
@@ -121,6 +159,8 @@
 }
 </style>
 <script>
+import axios from "axios";
+
 export default {
     name: 'App',
     data: () => ({
@@ -141,6 +181,9 @@ export default {
 
     },
     methods:{
+        async query(ip,port){
+            return await axios.get('/api?host='+ip+":"+port);
+        },
         color_replace(motd){
             const escape = '§';
             const color = {

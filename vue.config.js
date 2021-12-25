@@ -3,7 +3,8 @@ module.exports = {
     'vuetify'
   ],
   pwa: {},
-  publicPath: './static/',
-  // 输出文件目录
-  outputDir: 'dist/static',
+  publicPath: process.env.NODE_ENV === 'production'
+      ? './static/'
+      : '/',
+  outputDir: 'dist/static'
 }
