@@ -1,93 +1,27 @@
 <template>
     <v-app>
-        <v-img
-            src="~@/assets/img.png"
-            gradient="to top, rgba(0, 0, 1, 0), rgba(0, 0, 0, 0.33)"
-            max-height="340px"
-            min-height="340px"
-            height="340px"
-        >
-            <div class="fill-height mt-0 d-flex mx-auto">
-                <v-row
-                    justify="center"
-                    align="center"
-                    class="text-center"
-                >
-                    <v-col cols="12">
-                        <div class="my-15 my-sm-0 mx-6 pa-4">
-                            <div class="banner-title font-weight-black white--text">
-                                MCBE MOTD
-                            </div>
-                            <p class="pt-5 white--text subtitle-2">我的世界基岩版服务器实时状态，随时随地查看你的服务器信息，提供众多展示接口并开放全部源代码。</p>
-                            <div class="text-center">
-                                <gh-btns-star slug="BlackBEDevelopment/Minecraft-BedrockEdition-Server-Motd" show-count></gh-btns-star>
-                            </div>
-                        </div>
-                    </v-col>
-                </v-row>
-            </div>
-        </v-img>
-
+        <app-banner></app-banner>
         <v-main style="min-height: 60%" v-bind:class="{dark_background: this.$vuetify.theme.dark}">
             <v-container style="margin-top: -59px">
                 <v-row
-                    justify="center"
                     dense
+                    justify="center"
                 >
                     <v-col
                         cols="12"
-                        sm="12"
-                        md="8"
                         lg="8"
+                        md="8"
+                        sm="12"
                         xl="6"
                     >
-                        <v-card>
-                            <v-card-text>
-                                <v-container fluid>
-                                    <v-row>
-                                        <div class="d-flex">
-                                            <v-card elevation="0" height="80">
-                                                <v-img
-                                                    width="80"
-                                                    src="@/assets/pm.png"
-                                                    lazy-src="@/assets/pm.png"
-                                                    :aspect-ratio="1"
-                                                ></v-img>
-                                            </v-card>
-                                            <div class="ml-4">
-                                                <h2 class="title" v-html="color_replace(this.query_data.motd)"></h2>
-                                                <div class="text-subtitle-1">
-                                                    <v-icon size="16">mdi-server</v-icon>
-                                                    {{ this.query_data.host }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </v-row>
-                                    <v-row
-                                        class="pt-4"
-                                    >
-                                        <v-btn
-                                            v-for="item in this.query_data"
-                                            small
-                                            depressed
-                                            tile
-                                            color="primary"
-                                            style="margin-left: 10px"
-                                            class="mt-1"
-                                        >
-                                            {{ item }}
-                                        </v-btn>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
+                        <server-info></server-info>
                     </v-col>
                     <v-col cols="12"></v-col>
                     <v-col
                         cols="12"
-                        sm="12"
-                        md="8"
                         lg="8"
+                        md="8"
+                        sm="12"
                         xl="6"
                     >
                         <v-card>
@@ -99,23 +33,23 @@
                                 <v-row dense>
                                     <v-col cols="12" md="7">
                                         <v-text-field
-                                            label="Server IP Address"
-                                            outlined
+                                            v-model="input.ip"
                                             clearable
                                             dense
-                                            v-model="input.ip"
+                                            label="Server IP Address"
+                                            outlined
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col md="1" class="text-center align-center hidden-sm-and-down colon" >
+                                    <v-col class="text-center align-center hidden-sm-and-down colon" md="1">
                                         <span>:</span>
                                     </v-col>
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            outlined
+                                            v-model="input.port"
                                             clearable
                                             dense
                                             label="Server Port"
-                                            v-model="input.port"
+                                            outlined
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
@@ -128,80 +62,26 @@
                 </v-row>
             </v-container>
         </v-main>
-        <v-footer
-            padless
-        >
-            <v-card
-                tile
-                class="text-center"
-                width="100%"
-            >
-                <v-card-text>
-                    <v-fab-transition>
-                        <v-btn
-                            color="pink"
-                            absolute
-                            top
-                            right
-                            dark
-                            @click="switchTheme"
-                        >
-                            <v-icon left v-if="this.$vuetify.theme.dark">mdi-weather-night</v-icon>
-                            <v-icon left v-else>mdi-weather-sunny</v-icon>
-                            切换主题
-                        </v-btn>
-                    </v-fab-transition>
-                    本项目由 BlackBE 云黑团队开发维护，BlakcBE云黑平台致力于维护服务器游戏平衡。
-                    <br>
-                    <v-btn
-                        class="mx-4"
-                        icon
-                        href="https://github.com/blackbedevlopment "
-                        target="_blank"
-                    >
-                        <v-icon size="24px">
-                            mdi-github
-                        </v-icon>
-                    </v-btn>
-                    <v-btn
-                        class="mx-4"
-                        icon
-                        href="#"
-                        target="_blank"
-                    >
-                        <v-icon size="24px">
-                            mdi-email
-                        </v-icon>
-                    </v-btn>
-                    <p>
-                        Copyright &copy {{ new Date().getFullYear() }} <strong>BlackBEDevelopment</strong> All Right Reserved.
-                    </p>
-                </v-card-text>
 
-            </v-card>
-        </v-footer>
+        <app-footer></app-footer>
     </v-app>
 </template>
 
 
 <script>
 import axios from "axios";
+import Banner from "@/components/Banner";
+import Footer from "@/components/Footer";
+import ServerInfo from "@/components/ServerInfo";
 
 export default {
     name: 'App',
+    components: {
+        'app-banner': Banner,
+        'app-footer': Footer,
+        'server-info': ServerInfo
+    },
     data: () => ({
-        query_data: {
-            status: "online",
-            host: "nyan.xyz:19132",
-            motd: "§3欢迎加入 §eN§2y§4a§6n§2服§4务§6器§e",
-            agreement: "471",
-            version: "1.17.40",
-            online: "0",
-            max: "100",
-            level_name: "PocketMine-MP",
-            gamemode: "Survival",
-            delay: 12
-        },
         input: { // 此处是默认显示的服务器状态信息
             ip: 'nyancat.xyz',
             port: 19132
@@ -209,93 +89,29 @@ export default {
     }),
     created() {
         let dark = false;
-        if(this.$store.state.dark == null){
+        if (this.$store.state.dark == null) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 dark = true;
             } else {
                 const hour = new Date().getHours();
                 dark = hour < 5 || hour > 19;
             }
-            this.$store.commit('mutationDark',dark);
-        }else{
+            this.$store.commit('mutationDark', dark);
+        } else {
             dark = this.$store.state.dark;
         }
         this.$vuetify.theme.dark = dark;
     },
-    methods:{
-        async query(ip,port){
-            return await axios.get('/api?host='+ip+":"+port);
+    methods: {
+        async query(ip, port) {
+            return await axios.get('/api?host=' + ip + ":" + port);
         },
-        color_replace(motd){
-            const escape = '§';
-            const color = {
-                "0": "<span style=color:#000>",
-                "1": "<span style=color:#00A>",
-                "2": "<span style=color:#0A0>",
-                "3": "<span style=color:#0AA>",
-                "4": "<span style=color:#A00>",
-                "5": "<span style=color:#A0A>",
-                "6": "<span style=color:#FA0>",
-                "7": "<span style=color:#AAA>",
-                "8": "<span style=color:#555>",
-                "9": "<span style=color:#55F>",
-                "a": "<span style=color:#5F5>",
-                "b": "<span style=color:#5FF>",
-                "c": "<span style=color:#F55>",
-                "d": "<span style=color:#F5F>",
-                "e": "<span style=color:#FF5>",
-                "f": "<span style=color:#FFF>",
-            };
-            let map = motd.split(escape);
-            let num = 0;
-            let result = "";
-            if(map.length > 1){
-                map.forEach((item,index) => {
-                    if(color[item.substr(0, 1)] !== undefined){
-                        if(num > 0){
-                            map[index] = "</span>"+color[item.substr(0, 1)] + item.substr(1);
-                        }else{
-                            map[index] = color[item.substr(0, 1)] + item.substr(1);
-                        }
-                        num = num+1;
-                        result = result + map[index];
-                    }
-                });
-            }else{
-                result = motd;
-            }
-            return result;
-        },
-        switchTheme(){
-            this.$store.commit('mutationDark',!this.$vuetify.theme.dark);
-            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-        }
+
     }
 };
 </script>
 
 
 <style>
-@import "~@mdi/font/css/materialdesignicons.min.css";
-@import "~vue-github-buttons/dist/vue-github-buttons.min.css";
-.banner-title {
-    font-size: clamp(1rem, 1rem + 5vw, 3rem);
-}
-.gh-button-container{
-    float: none!important;
-}
-.colon {
-    font-weight: 600 !important;
-    font-size: 30px;
-    margin-top: 7px;
-    color: lightgrey
-}
-.colon:hover {
-    color: black;
-}
-.dark_background {
-    background-size: initial;
-    background: rgb(0,0,0);
-    /*background: rgb(0, 0, 0) url("~@/assets/img_1.png") repeat fixed;*/
-}
+@import "assets/main.css";
 </style>

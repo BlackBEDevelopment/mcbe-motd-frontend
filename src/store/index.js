@@ -1,21 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
-import createPersistedState from "vuex-persistedstate";
 
 export default new Vuex.Store({
     state: {
         dark: null
     },
     mutations: {
-        mutationDark(state,data){
+        mutationDark(state, data) {
             state.dark = data;
         },
     },
-    actions: {
-    },
-    modules: {
-    },
+    actions: {},
+    modules: {},
     plugins: [createPersistedState()],
 });
