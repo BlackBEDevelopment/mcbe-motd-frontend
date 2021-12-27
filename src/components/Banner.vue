@@ -5,7 +5,7 @@
             height="340px"
             max-height="340px"
             min-height="340px"
-            src="~@/assets/img.png"
+            src="~@/assets/img_3.png"
         >
             <div class="fill-height mt-0 d-flex mx-auto">
                 <v-row

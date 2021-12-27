@@ -10,9 +10,12 @@ import VueGitHubButtons from 'vue-github-buttons';
 Vue.config.productionTip = false;
 
 Vue.use(VueGitHubButtons, {useCache: true});
+import anime from "animejs";
+import router from "@/router";
+window.anime = anime;
 
 const index = new Vue({
-    // router,
+    router,
     store,
     vuetify,
     render: h => h(App)
