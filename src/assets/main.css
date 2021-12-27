@@ -13,6 +13,5 @@
 
 .dark_background {
     background-size: initial;
-    background: rgb(0, 0, 0);
-    /*background: rgb(0, 0, 0) url("~@/assets/img_1.png") repeat fixed;*/
+    background: rgb(0, 0, 0) url("~@/assets/img_2.png") repeat fixed;
 }

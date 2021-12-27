@@ -1,7 +1,7 @@
 <template>
     <div id="server-info">
-        <v-card elevation="0">
-            <v-card-text>
+        <v-card elevation="0" >
+            <v-card-text v-if="this.query_data !== null && this.query_data.status == true">
                 <v-container fluid>
                     <v-row>
                         <div class="d-flex">
@@ -14,10 +14,14 @@
                                 ></v-img>
                             </v-card>
                             <div class="ml-4">
-                                <h2 class="title" v-html="color_replace(this.query_data.motd)"></h2>
+                                <h2 class="title" v-html="text_format(this.query_data.motd)"></h2>
                                 <div class="text-subtitle-1">
                                     <v-icon size="16">mdi-server</v-icon>
                                     {{ this.query_data.host }}
+                                </div>
+                                <div class="text-subtitle-2">
+                                    <v-icon size="16">mdi-gamepad</v-icon>
+                                    MCBE: {{ this.query_data.version }} | Protocol: {{ this.query_data.agreement }}
                                 </div>
                             </div>
                         </div>
@@ -47,22 +51,48 @@
 export default {
     name: "ServerInfo",
     data: () => ({
-        query_data: {
-            status: "online",
-            host: "nyan.xyz:19132",
-            motd: "§3欢迎加入 §eN§2y§4a§6n§2服§4务§6器§e",
-            agreement: "471",
-            version: "1.17.40",
-            online: "0",
-            max: "100",
-            level_name: "PocketMine-MP",
-            gamemode: "Survival",
-            delay: 12
-        }
+
     }),
+    props: {
+        query_data: {
+            type: Object | Boolean,
+            default(){
+               return {
+                   status: true,
+                   host: "nyan.xyz:19132",
+                   motd: "§3欢迎加入 §eN§2y§4a§6n§2服§4务§6器§e",
+                   agreement: "471",
+                   version: "1.17.40",
+                   online: "0",
+                   max: "100",
+                   level_name: "PocketMine-MP",
+                   gamemode: "Survival",
+                   delay: 12
+               }
+            }
+        }
+    },
+    created() {
+        console.log(this.query_data)
+    },
+    mounted() {
+    },
     methods: {
-        color_replace(motd) {
+        // 参考: https://github.com/pmmp/PocketMine-MP/blob/stable/src/utils/TextFormat.php
+        // 基本实现了基础的替换 有人需要再发npm包吧? 应该不会有吧(((
+        // 感觉不是太完美 希望有人提pr吧（（ 也欢迎issue和我讨论
+        text_format(motd) {
             const escape = '§';
+            const formats = {
+                "k": "<span style=text-decoration:line-through>", // 这个好像没啥办法做（（ 就先这样吧
+                "l": "<span style=font-weight:bold>",
+                "m": "<span style=text-decoration:line-through>",
+                "n": "<span style=text-decoration:underline>",
+                "o": "<span style=font-style:italic>"
+            };
+            const reset = {
+                "r": "</span>"
+            };
             const color = {
                 "0": "<span style=color:#000>",
                 "1": "<span style=color:#00A>",
@@ -82,18 +112,40 @@ export default {
                 "f": "<span style=color:#FFF>",
             };
             let map = motd.split(escape);
-            let num = 0;
+            let color_state = false;
             let result = "";
+            let format_state = false;
+            let reset_state = false;
             if (map.length > 1) {
                 map.forEach((item, index) => {
                     if (color[item.substr(0, 1)] !== undefined) {
-                        if (num > 0) {
-                            map[index] = "</span>" + color[item.substr(0, 1)] + item.substr(1);
+                        if (color_state) {
+                            if (reset_state) {
+                                reset_state = false;
+                            } else {
+                                map[index] = "</span>" + color[item.substr(0, 1)] + item.substr(1);
+                            }
                         } else {
                             map[index] = color[item.substr(0, 1)] + item.substr(1);
                         }
-                        num = num + 1;
                         result = result + map[index];
+                    } else if (formats[item.substr(0, 1)] !== undefined) {
+                        if (format_state) {
+                            if (reset_state) {
+                                reset_state = false;
+                            } else {
+                                map[index] = "</span>" + formats[item.substr(0, 1)] + item.substr(1);
+                            }
+                        } else {
+                            map[index] = formats[item.substr(0, 1)] + item.substr(1);
+                        }
+                        result = result + map[index];
+                    } else if (reset[item.substr(0, 1)] !== undefined) {
+                        map[index] = "</span>" + item.substr(1);
+                        reset_state = true;
+                        result = result + map[index];
+                    }else {
+                        result = result + item.substr(1);
                     }
                 });
             } else {

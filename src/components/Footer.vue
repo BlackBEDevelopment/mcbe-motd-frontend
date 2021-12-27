@@ -9,18 +9,18 @@
                 width="100%"
             >
                 <v-card-text>
-                    <v-fab-transition>
+                    <v-fab-transition >
                         <v-btn
                             absolute
                             color="pink"
                             dark
                             right
                             top
+                            fab
                             @click="switchTheme"
                         >
-                            <v-icon v-if="this.$vuetify.theme.dark" left>mdi-weather-night</v-icon>
-                            <v-icon v-else left>mdi-weather-sunny</v-icon>
-                            切换主题
+                            <v-icon v-if="!this.$vuetify.theme.dark">mdi-weather-night</v-icon>
+                            <v-icon v-else>mdi-weather-sunny</v-icon>
                         </v-btn>
                     </v-fab-transition>
                     本项目由 BlackBE 云黑团队开发维护，BlakcBE云黑平台致力于维护服务器游戏平衡。

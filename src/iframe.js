@@ -12,7 +12,6 @@ Vue.config.productionTip = false;
 
 Vue.use(VueGitHubButtons, {useCache: true});
 
-
 const iframe = new Vue({
     store,
     vuetify,

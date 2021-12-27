@@ -14,7 +14,7 @@
                         sm="12"
                         xl="6"
                     >
-                        <server-info class="elevation-2"></server-info>
+                        <server-info class="elevation-2" v-bind:query_data="data"></server-info>
                     </v-col>
                     <v-col cols="12"></v-col>
                     <v-col
@@ -62,18 +62,18 @@
                 </v-row>
             </v-container>
         </v-main>
-
         <app-footer></app-footer>
+
     </v-app>
 </template>
 
 
 <script>
-import axios from "axios";
 import Banner from "@/components/Banner";
 import Footer from "@/components/Footer";
 import ServerInfo from "@/components/ServerInfo";
-
+import router from "@/router/index";
+import axios from 'axios';
 export default {
     name: 'App',
     components: {
@@ -82,10 +82,11 @@ export default {
         'server-info': ServerInfo
     },
     data: () => ({
-        input: { // 此处是默认显示的服务器状态信息
-            ip: 'nyancat.xyz',
-            port: 19132
-        }
+        input: {
+            ip: null,
+            port: null
+        },
+        data: null
     }),
     created() {
         let dark = false;
@@ -101,12 +102,39 @@ export default {
             dark = this.$store.state.dark;
         }
         this.$vuetify.theme.dark = dark;
+
+        let ip = router.currentRoute.query.ip;
+        let port = router.currentRoute.query.port;
+        if(ip === undefined || port === undefined || ip === null || port === null){
+            // 此处是默认显示的服务器状态信息
+            this.input.ip = 'nyancat.xyz';
+            this.input.port = 19132;
+        }else{
+            this.input.ip = ip;
+            this.input.port = port;
+        }
+    },
+    mounted() {
+        this.update(this.input.ip,this.input.port);
     },
     methods: {
         async query(ip, port) {
             return await axios.get('/api?host=' + ip + ":" + port);
         },
-
+        update(ip,port){
+            this.query(ip,port).then((res) => {
+                console.log(res.data)
+                this.data = res.data;
+                if(res.data.status === "offline"){
+                    this.data.status = false;
+                }else{
+                    this.data.status = true;
+                }
+                console.log(this.data)
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     }
 };
 </script>
