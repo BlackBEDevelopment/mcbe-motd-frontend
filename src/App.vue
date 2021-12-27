@@ -25,20 +25,21 @@
                         </div>
                     </v-col>
                 </v-row>
-
             </div>
         </v-img>
 
-        <v-main style="min-height: 60%">
+        <v-main style="min-height: 60%" v-bind:class="{dark_background: this.$vuetify.theme.dark}">
             <v-container style="margin-top: -59px">
                 <v-row
                     justify="center"
+                    dense
                 >
                     <v-col
                         cols="12"
-                        sm="8"
+                        sm="12"
                         md="8"
                         lg="8"
+                        xl="6"
                     >
                         <v-card>
                             <v-card-text>
@@ -81,11 +82,13 @@
                             </v-card-text>
                         </v-card>
                     </v-col>
+                    <v-col cols="12"></v-col>
                     <v-col
                         cols="12"
-                        sm="8"
+                        sm="12"
                         md="8"
                         lg="8"
+                        xl="6"
                     >
                         <v-card>
                             <v-card-title>
@@ -100,7 +103,7 @@
                                             outlined
                                             clearable
                                             dense
-                                            v-model="this.input.ip"
+                                            v-model="input.ip"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col md="1" class="text-center align-center hidden-sm-and-down colon" >
@@ -112,7 +115,7 @@
                                             clearable
                                             dense
                                             label="Server Port"
-                                            v-model="this.input.port"
+                                            v-model="input.port"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
@@ -134,6 +137,20 @@
                 width="100%"
             >
                 <v-card-text>
+                    <v-fab-transition>
+                        <v-btn
+                            color="pink"
+                            absolute
+                            top
+                            right
+                            dark
+                            @click="switchTheme"
+                        >
+                            <v-icon left v-if="this.$vuetify.theme.dark">mdi-weather-night</v-icon>
+                            <v-icon left v-else>mdi-weather-sunny</v-icon>
+                            切换主题
+                        </v-btn>
+                    </v-fab-transition>
                     本项目由 BlackBE 云黑团队开发维护，BlakcBE云黑平台致力于维护服务器游戏平衡。
                     <br>
                     <v-btn
@@ -185,13 +202,25 @@ export default {
             gamemode: "Survival",
             delay: 12
         },
-        input: {
+        input: { // 此处是默认显示的服务器状态信息
             ip: 'nyancat.xyz',
             port: 19132
         }
     }),
     created() {
-
+        let dark = false;
+        if(this.$store.state.dark == null){
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                dark = true;
+            } else {
+                const hour = new Date().getHours();
+                dark = hour < 5 || hour > 19;
+            }
+            this.$store.commit('mutationDark',dark);
+        }else{
+            dark = this.$store.state.dark;
+        }
+        this.$vuetify.theme.dark = dark;
     },
     methods:{
         async query(ip,port){
@@ -236,6 +265,10 @@ export default {
                 result = motd;
             }
             return result;
+        },
+        switchTheme(){
+            this.$store.commit('mutationDark',!this.$vuetify.theme.dark);
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
         }
     }
 };
@@ -259,5 +292,10 @@ export default {
 }
 .colon:hover {
     color: black;
+}
+.dark_background {
+    background-size: initial;
+    background: rgb(0,0,0);
+    /*background: rgb(0, 0, 0) url("~@/assets/img_1.png") repeat fixed;*/
 }
 </style>
