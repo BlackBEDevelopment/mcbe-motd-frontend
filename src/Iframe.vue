@@ -4,7 +4,7 @@
             <div v-if="error" class="text-center pt-4">
                 <h1>服务器不在线</h1>
             </div>
-            <server-info v-else :query_data="data"></server-info>
+            <server-info v-else :query_data="data" v-bind:loading="loading"></server-info>
         </v-app>
     </div>
 </template>
@@ -25,7 +25,8 @@ export default {
         input: {
             ip: null,
             port: null
-        }
+        },
+        loading: true
     }),
     created() {
         let ip = router.currentRoute.query.ip;
@@ -49,8 +50,10 @@ export default {
         update(ip, port) {
             this.query(ip, port).then((res) => {
                 this.data = res.data;
+                this.loading = false;
                 this.data.status = res.data.status !== "offline";
             }).catch((err) => {
+                this.loading = false;
                 console.log(err);
             });
         }

@@ -7,7 +7,7 @@
                         <div class="d-flex">
                             <v-card elevation="0" height="80">
                                 <v-img
-                                    v-if="this.query_data !== null || this.query_data.status === true"
+                                    v-if="this.query_data == null || this.query_data.status !== true"
                                     :aspect-ratio="1"
                                     lazy-src="@/assets/img_5.png"
                                     src="@/assets/img_5.png"
