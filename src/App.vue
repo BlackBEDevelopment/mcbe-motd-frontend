@@ -59,6 +59,13 @@
                             </v-card-text>
                         </v-card>
                     </v-col>
+<!--                  先鸽了  <v-col cols="12"></v-col>
+                    <v-col
+                        cols="12"
+
+                    >
+                        <history></history>
+                    </v-col>-->
                 </v-row>
             </v-container>
         </v-main>
@@ -74,12 +81,14 @@ import Footer from "@/components/Footer";
 import ServerInfo from "@/components/ServerInfo";
 import router from "@/router/index";
 import axios from 'axios';
+import History from "@/components/History";
 export default {
     name: 'App',
     components: {
         'app-banner': Banner,
         'app-footer': Footer,
-        'server-info': ServerInfo
+        'server-info': ServerInfo,
+        'history': History
     },
     data: () => ({
         input: {
@@ -107,7 +116,7 @@ export default {
         let port = router.currentRoute.query.port;
         if(ip === undefined || port === undefined || ip === null || port === null){
             // 此处是默认显示的服务器状态信息
-            this.input.ip = 'nyancat.xyz';
+            this.input.ip = 'nyan.xyz';
             this.input.port = 19132;
         }else{
             this.input.ip = ip;
@@ -123,14 +132,8 @@ export default {
         },
         update(ip,port){
             this.query(ip,port).then((res) => {
-                console.log(res.data)
                 this.data = res.data;
-                if(res.data.status === "offline"){
-                    this.data.status = false;
-                }else{
-                    this.data.status = true;
-                }
-                console.log(this.data)
+                this.data.status = res.data.status !== "offline";
             }).catch((err) => {
                 console.log(err);
             });

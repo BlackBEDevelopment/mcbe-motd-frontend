@@ -1,15 +1,15 @@
 <template>
     <div id="server-info">
-        <v-card elevation="0" >
-            <v-card-text v-if="this.query_data !== null && this.query_data.status == true">
+        <v-card elevation="0">
+            <v-card-text v-if="this.query_data !== null && this.query_data.status === true">
                 <v-container fluid>
                     <v-row>
                         <div class="d-flex">
                             <v-card elevation="0" height="80">
                                 <v-img
                                     :aspect-ratio="1"
-                                    lazy-src="@/assets/pm.png"
-                                    src="@/assets/pm.png"
+                                    lazy-src="@/assets/img_4.png"
+                                    src="@/assets/img_4.png"
                                     width="80"
                                 ></v-img>
                             </v-card>
@@ -29,16 +29,47 @@
                     <v-row
                         class="pt-4"
                     >
+
                         <v-btn
-                            v-for="item in this.query_data"
                             class="mt-1"
-                            color="primary"
+                            :color="(this.query_data.gamemode === 'Survival')? 'deep-orange': 'red' "
                             depressed
                             small
                             style="margin-left: 10px"
                             tile
                         >
-                            {{ item }}
+                           游戏模式: {{ this.query_data.gamemode }}
+                        </v-btn>
+                        <v-btn
+                            class="mt-1"
+                            color="cyan"
+                            depressed
+                            small
+                            style="margin-left: 10px"
+                            tile
+                        >
+                            在线人数: {{ this.query_data.online }} / {{ this.query_data.max }}
+                        </v-btn>
+
+                        <v-btn
+                            class="mt-1"
+                            color="indigo"
+                            depressed
+                            small
+                            style="margin-left: 10px"
+                            tile
+                        >
+                            地图名: {{ this.query_data.level_name }}
+                        </v-btn>
+                        <v-btn
+                            class="mt-1"
+                            :color="(this.query_data.delay > 50)? 'warning': 'success' "
+                            depressed
+                            small
+                            style="margin-left: 10px"
+                            tile
+                        >
+                            延迟: {{ this.query_data.delay }} ms
                         </v-btn>
                     </v-row>
                 </v-container>
@@ -50,30 +81,16 @@
 <script>
 export default {
     name: "ServerInfo",
-    data: () => ({
-
-    }),
+    data: () => ({}),
     props: {
         query_data: {
             type: Object | Boolean,
-            default(){
-               return {
-                   status: true,
-                   host: "nyan.xyz:19132",
-                   motd: "§3欢迎加入 §eN§2y§4a§6n§2服§4务§6器§e",
-                   agreement: "471",
-                   version: "1.17.40",
-                   online: "0",
-                   max: "100",
-                   level_name: "PocketMine-MP",
-                   gamemode: "Survival",
-                   delay: 12
-               }
+            default() {
+                return null;
             }
         }
     },
     created() {
-        console.log(this.query_data)
     },
     mounted() {
     },
@@ -144,7 +161,7 @@ export default {
                         map[index] = "</span>" + item.substr(1);
                         reset_state = true;
                         result = result + map[index];
-                    }else {
+                    } else {
                         result = result + item.substr(1);
                     }
                 });
