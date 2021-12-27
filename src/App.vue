@@ -117,7 +117,7 @@ export default {
         let port = router.currentRoute.query.port;
         if(ip === undefined || port === undefined || ip === null || port === null){
             // 此处是默认显示的服务器状态信息
-            this.input.ip = 'nyan.xyz';
+            this.input.ip = 'play.easecation.net';
             this.input.port = 19132;
         }else{
             this.input.ip = ip;
