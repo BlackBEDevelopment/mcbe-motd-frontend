@@ -1,5 +1,5 @@
 <template>
-<div class="pa-3">
+<div class="pt-4">
     <h1 class="title text-center">查&nbsp询&nbsp记&nbsp录</h1>
     <v-slide-group
         v-model="model"
@@ -65,13 +65,18 @@
     <v-expand-transition>
         <v-sheet
             v-if="model != null"
+            height="200"
             tile
         >
-           <v-card>
-               <v-card-text>
-
-               </v-card-text>
-           </v-card>
+            <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+            >
+                <h3 class="text-h6">
+                    Selected {{ model }}
+                </h3>
+            </v-row>
         </v-sheet>
     </v-expand-transition>
 </div>

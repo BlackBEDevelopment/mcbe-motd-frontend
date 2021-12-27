@@ -1,19 +1,27 @@
 <template>
     <div id="server-info">
-        <v-card elevation="0">
-            <v-card-text v-if="this.query_data !== null && this.query_data.status === true">
+        <v-card elevation="0" :loading="loading" :disabled="loading">
+            <v-card-text>
                 <v-container fluid>
                     <v-row>
                         <div class="d-flex">
                             <v-card elevation="0" height="80">
                                 <v-img
+                                    v-if="this.query_data !== null || this.query_data.status === true"
+                                    :aspect-ratio="1"
+                                    lazy-src="@/assets/img_5.png"
+                                    src="@/assets/img_5.png"
+                                    width="80"
+                                ></v-img>
+                                <v-img
+                                    v-else
                                     :aspect-ratio="1"
                                     lazy-src="@/assets/img_4.png"
                                     src="@/assets/img_4.png"
                                     width="80"
                                 ></v-img>
                             </v-card>
-                            <div class="ml-4">
+                            <div class="ml-4" v-if="this.loading !== true && this.query_data !== null && this.query_data.status === true">
                                 <h2 class="title" v-html="text_format(this.query_data.motd)"></h2>
                                 <div class="text-subtitle-1">
                                     <v-icon size="16">mdi-server</v-icon>
@@ -24,12 +32,25 @@
                                     MCBE: {{ this.query_data.version }} | Protocol: {{ this.query_data.agreement }}
                                 </div>
                             </div>
+                            <div class="ml-4" v-else-if="loading === true">
+                                <h2 class="title">正在加载</h2>
+                                <div class="text-subtitle-1">
+                                    如果迟迟不响应，请刷新页面重试，也许是🐱的api炸了呢
+                                </div>
+                            </div>
+                            <div class="ml-4" v-else>
+                                <h2 class="title">当前服务器离线</h2>
+                                <div class="text-subtitle-2">
+                                    所谓的携手共进不就是这样吗？如果平坦的道理上只有一个人的宽度，那么我会很开心地走上长满荆棘的道路。 --- 樱小路露娜
+                                </div>
+                            </div>
+
                         </div>
                     </v-row>
                     <v-row
                         class="pt-4"
+                        v-if="this.query_data !== null && this.query_data.status === true"
                     >
-
                         <v-btn
                             class="mt-1"
                             :color="(this.query_data.gamemode === 'Survival')? 'deep-orange': 'red' "
@@ -37,6 +58,7 @@
                             small
                             style="margin-left: 10px"
                             tile
+                            dark
                         >
                            游戏模式: {{ this.query_data.gamemode }}
                         </v-btn>
@@ -47,6 +69,7 @@
                             small
                             style="margin-left: 10px"
                             tile
+                            dark
                         >
                             在线人数: {{ this.query_data.online }} / {{ this.query_data.max }}
                         </v-btn>
@@ -58,6 +81,7 @@
                             small
                             style="margin-left: 10px"
                             tile
+                            dark
                         >
                             地图名: {{ this.query_data.level_name }}
                         </v-btn>
@@ -68,8 +92,26 @@
                             small
                             style="margin-left: 10px"
                             tile
+                            dark
                         >
                             延迟: {{ this.query_data.delay }} ms
+                        </v-btn>
+                    </v-row>
+                    <v-row
+                        class="pt-4"
+                        v-else
+                    >
+                        <v-btn
+                            class="mt-1"
+                            depressed
+                            small
+                            color="primary"
+                            style="margin-left: 10px"
+                            tile
+                            text
+                            disabled
+                        >
+                            加载中
                         </v-btn>
                     </v-row>
                 </v-container>
@@ -87,6 +129,12 @@ export default {
             type: Object | Boolean,
             default() {
                 return null;
+            }
+        },
+        loading: {
+            type: Boolean,
+            default() {
+                return true;
             }
         }
     },

@@ -14,7 +14,7 @@
                         sm="12"
                         xl="6"
                     >
-                        <server-info class="elevation-2" v-bind:query_data="data"></server-info>
+                        <server-info class="elevation-2" v-bind:query_data="data" v-bind:loading="loading"></server-info>
                     </v-col>
                     <v-col cols="12"></v-col>
                     <v-col
@@ -53,19 +53,19 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
-                                        <v-btn block color="primary">查询</v-btn>
+                                        <v-btn block color="primary" @click="update()" :disabled="loading">查询</v-btn>
                                     </v-col>
                                 </v-row>
                             </v-card-text>
                         </v-card>
                     </v-col>
-<!--                  先鸽了  <v-col cols="12"></v-col>
+                   <v-col cols="12"></v-col>
                     <v-col
                         cols="12"
 
                     >
                         <history></history>
-                    </v-col>-->
+                    </v-col>
                 </v-row>
             </v-container>
         </v-main>
@@ -95,7 +95,8 @@ export default {
             ip: null,
             port: null
         },
-        data: null
+        data: null,
+        loading: false
     }),
     created() {
         let dark = false;
@@ -124,18 +125,26 @@ export default {
         }
     },
     mounted() {
+        // this.loading = true;
         this.update(this.input.ip,this.input.port);
     },
     methods: {
         async query(ip, port) {
             return await axios.get('/api?host=' + ip + ":" + port);
         },
-        update(ip,port){
+        update(ip = null,port = null){
+            this.loading = true;
+            if(ip === null && port === null){
+                ip = this.input.ip;
+                port = this.input.port;
+            }
             this.query(ip,port).then((res) => {
                 this.data = res.data;
                 this.data.status = res.data.status !== "offline";
+                this.loading = false;
             }).catch((err) => {
                 console.log(err);
+                this.loading = false;
             });
         }
     }
