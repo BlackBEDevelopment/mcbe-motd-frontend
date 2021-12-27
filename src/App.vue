@@ -14,7 +14,7 @@
                         sm="12"
                         xl="6"
                     >
-                        <server-info></server-info>
+                        <server-info class="elevation-2"></server-info>
                     </v-col>
                     <v-col cols="12"></v-col>
                     <v-col

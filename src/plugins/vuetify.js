@@ -14,7 +14,7 @@ export default new Vuetify({
                 error: colors.red.accent3,
             },
             dark: {
-                primary: colors.blue.lighten3,
+                primary: colors.blue.purple,
             },
         },
     },

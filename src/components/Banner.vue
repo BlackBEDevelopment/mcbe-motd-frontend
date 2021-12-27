@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 @import "~vue-github-buttons/dist/vue-github-buttons.min.css";
 
 .banner-title {
@@ -46,5 +46,8 @@ export default {
 
 .gh-button-container {
     float: none !important;
+}
+.gh-button-container a{
+    color: black !important;
 }
 </style>
