@@ -27,7 +27,7 @@
                     <br>
                     <v-btn
                         class="mx-4"
-                        href="https://github.com/blackbedevlopment "
+                        href="https://github.com/blackbedevelopment"
                         icon
                         target="_blank"
                     >
@@ -35,19 +35,9 @@
                             mdi-github
                         </v-icon>
                     </v-btn>
-                    <v-btn
-                        class="mx-4"
-                        href="#"
-                        icon
-                        target="_blank"
-                    >
-                        <v-icon size="24px">
-                            mdi-email
-                        </v-icon>
-                    </v-btn>
                     <p>
-                        Copyright &copy {{ new Date().getFullYear() }} <strong>BlackBEDevelopment</strong> All Right
-                        Reserved.
+                        Copyright &copy {{ new Date().getFullYear() }} <strong>BlackBEDevelopment</strong> all reight
+                        reserved. Made by <a href="//github.com/lixworth">lixworth</a> with 🐱 .
                     </p>
                 </v-card-text>
 
