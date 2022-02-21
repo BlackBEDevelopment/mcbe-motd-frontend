@@ -53,24 +53,16 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
-                                        <v-btn block color="primary" @click="update()" :disabled="loading">查询</v-btn>
+                                      <v-btn block color="primary" @click="update()" :disabled="loading">查询</v-btn>
                                     </v-col>
                                 </v-row>
                             </v-card-text>
                         </v-card>
                     </v-col>
-                   <v-col cols="12"></v-col>
-                    <v-col
-                        cols="12"
-
-                    >
-                        <history></history>
-                    </v-col>
                 </v-row>
             </v-container>
         </v-main>
         <app-footer></app-footer>
-
     </v-app>
 </template>
 
