@@ -6,21 +6,21 @@ import Cookies from 'js-cookie';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    state: {
-        dark: null
+  state: {
+    dark: null
+  },
+  mutations: {
+    mutationDark(state, data) {
+      state.dark = data;
     },
-    mutations: {
-        mutationDark(state, data) {
-            state.dark = data;
-        },
-    },
-    actions: {},
-    modules: {},
-    plugins: [createPersistedState({
-        storage: {
-            getItem: key => Cookies.get(key),
-            setItem: (key, value) => Cookies.set(key, value, { expires: 3, secure: true }),
-            removeItem: key => Cookies.remove(key)
-        }
-    })],
+  },
+  actions: {},
+  modules: {},
+  plugins: [createPersistedState({
+    storage: {
+      getItem: key => Cookies.get(key),
+      setItem: (key, value) => Cookies.set(key, value, {expires: 3, secure: true}),
+      removeItem: key => Cookies.remove(key)
+    }
+  })],
 });

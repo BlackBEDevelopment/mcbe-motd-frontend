@@ -8,8 +8,8 @@
       <v-fade-transition v-if="demo">
         <v-overlay
             absolute
-            opacity="0.4"
             color="grey darken-1"
+            opacity="0.4"
         >
           <span class="title">预览图</span>
         </v-overlay>
@@ -49,17 +49,13 @@ export default {
       this.input.ip = ip;
       this.input.port = port;
     }
-    if(dark !== undefined && dark !== null){
+    if (demo !== undefined && demo !== null) {
       this.demo = true;
     }
-    if(dark === undefined || dark === null){
+    if (dark === undefined || dark === null) {
       console.log(dark)
       this.$vuetify.theme.dark = false;
-    }else if(dark == 'true'){
-      this.$vuetify.theme.dark = true;
-    }else{
-      this.$vuetify.theme.dark = false;
-    }
+    } else this.$vuetify.theme.dark = dark === 'true';
   },
   mounted() {
     if (!this.error) {

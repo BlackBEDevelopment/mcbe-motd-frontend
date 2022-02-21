@@ -6,7 +6,6 @@
         top
     >
       {{ text }}
-
       <template v-slot:action="{ attrs }">
         <v-btn
             color="blue"
@@ -32,7 +31,7 @@
               sm="12"
               xl="6"
           >
-            <server-info class="elevation-2" v-bind:query_data="data" v-bind:loading="loading"></server-info>
+            <server-info class="elevation-2" v-bind:loading="loading" v-bind:query_data="data"></server-info>
           </v-col>
           <v-col cols="12"></v-col>
           <v-col
@@ -71,7 +70,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-btn block color="primary" @click="update()" :disabled="loading">查询</v-btn>
+                    <v-btn :disabled="loading" block color="primary" @click="update()">查询</v-btn>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -97,10 +96,10 @@
                         md="2"
                     >
                       <v-text-field
-                          outlined
-                          dense
                           v-model="width"
+                          dense
                           label="Width"
+                          outlined
                           required
                       ></v-text-field>
                     </v-col>
@@ -109,28 +108,30 @@
                         md="2"
                     >
                       <v-text-field
-                          outlined
-                          dense
                           v-model="height"
+                          dense
                           label="Height"
+                          outlined
                           required
                       ></v-text-field>
                     </v-col>
                     <v-col md="8">
                       <v-btn class="mr-2" v-on:click="()=>{
                         this.dark = !this.dark;
-                      }">切换主题</v-btn>
+                      }">切换主题
+                      </v-btn>
                       <v-btn class="primary" v-on:click="copyLink">一键复制代码</v-btn>
                     </v-col>
-                    <v-col cols="12" class="mt-2">
+                    <v-col class="mt-2" cols="12">
                       <v-textarea
-                          rows="3"
-                          outlined
                           v-model="iframe"
                           label="代码"
+                          outlined
+                          rows="3"
                       ></v-textarea>
-                      <div class="elevation-2 mb-5 grey pa-3 text-center" v-if="$vuetify.breakpoint.mdAndUp">
-                        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=500 height=195 scrolling=no :src="link + '&demo=true'"></iframe>
+                      <div v-if="$vuetify.breakpoint.mdAndUp" class="elevation-2 mb-5 grey pa-3 text-center">
+                        <iframe :src="link + '&demo=true'" border="0" frameborder="no" height=195 marginheight="0" marginwidth="0"
+                                scrolling=no width=500></iframe>
                       </div>
                     </v-col>
                   </v-row>
@@ -155,6 +156,7 @@ import ServerInfo from "@/components/ServerInfo";
 import router from "@/router/index";
 import axios from 'axios';
 import History from "@/components/History";
+
 export default {
   name: 'App',
   components: {
@@ -195,11 +197,11 @@ export default {
 
     let ip = router.currentRoute.query.ip;
     let port = router.currentRoute.query.port;
-    if(ip === undefined || port === undefined || ip === null || port === null){
+    if (ip === undefined || port === undefined || ip === null || port === null) {
       // 此处是默认显示的服务器状态信息
       this.input.ip = 'play.easecation.net';
       this.input.port = 19132;
-    }else{
+    } else {
       this.input.ip = ip;
       this.input.port = port;
     }
@@ -208,16 +210,16 @@ export default {
   },
   mounted() {
     // this.loading = true;
-    this.update(this.input.ip,this.input.port);
+    this.update(this.input.ip, this.input.port);
   },
   watch: {
-    width(){
+    width() {
       this.refreshIframe();
     },
-    height(){
+    height() {
       this.refreshIframe();
     },
-    dark(){
+    dark() {
       this.refreshIframe();
     }
   },
@@ -225,32 +227,34 @@ export default {
     async query(ip, port) {
       return await axios.get('/api?host=' + ip + ":" + port);
     },
-    refreshIframe(){
-      this.link = '//' + window.location.host + '/iframe.html?ip='+this.input.ip+'&port='+this.input.port+"&dark="+this.dark;
-      this.iframe = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=500 height=195 scrolling=no src="'+this.link +'"></iframe>';
+    refreshIframe() {
+      this.link = '//' + window.location.host + '/iframe.html?ip=' + this.input.ip + '&port=' + this.input.port + "&dark=" + this.dark;
+      this.iframe = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=500 height=195 scrolling=no src="' + this.link + '"></iframe>';
     },
-    update(ip = null,port = null){
+    async update(ip = null, port = null) {
       this.loading = true;
-      if(ip === null && port === null){
+      if (ip === null && port === null) {
         ip = this.input.ip;
         port = this.input.port;
       }
-      this.query(ip,port).then((res) => {
-        this.data = res.data;
-        this.data.status = res.data.status !== "offline";
+      let query = await this.query(ip, port);
+
+      if (query.status === 200) {
+        this.data = query.data;
+        this.data.status = query.data.status !== "offline";
         this.loading = false;
-      }).catch((err) => {
-        console.log(err);
+      } else {
+        console.log(query);
         this.loading = false;
-      });
+      }
     },
-    copyLink(){
-      this.copyText(this.iframe,(res)=>{
+    copyLink() {
+      this.copyText(this.iframe, (res) => {
         this.snackbar = true;
       });
     },
     // 随便网上复制一个得了 （
-    copyText(text, callback){ // text: 要复制的内容， callback: 回调
+    copyText(text, callback) { // text: 要复制的内容， callback: 回调
       let tag = document.createElement('input');
       tag.setAttribute('id', 'cp_hgz_input');
       tag.value = text;
@@ -258,10 +262,12 @@ export default {
       document.getElementById('cp_hgz_input').select();
       document.execCommand('copy');
       document.getElementById('cp_hgz_input').remove();
-      if(callback) {callback(text)}
+      if (callback) {
+        callback(text)
+      }
     }
   }
-};
+}
 </script>
 
 
