@@ -247,6 +247,8 @@ export default {
         console.log(query);
         this.loading = false;
       }
+
+      this.refreshIframe();
     },
     copyLink() {
       this.copyText(this.iframe, (res) => {
