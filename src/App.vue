@@ -130,8 +130,8 @@
                           rows="3"
                       ></v-textarea>
                       <div v-if="$vuetify.breakpoint.mdAndUp" class="elevation-2 mb-5 grey pa-3 text-center">
-                        <iframe :src="link + '&demo=true'" border="0" frameborder="no" height=195 marginheight="0" marginwidth="0"
-                                scrolling=no width=500></iframe>
+                        <iframe :src="link + '&demo=true'" border="0" frameborder="no" :height="height" marginheight="0" marginwidth="0"
+                                scrolling=no :width="width"></iframe>
                       </div>
                     </v-col>
                   </v-row>
@@ -228,8 +228,8 @@ export default {
       return await axios.get('/api?host=' + ip + ":" + port);
     },
     refreshIframe() {
-      this.link = '//' + window.location.host + '/iframe.html?ip=' + this.input.ip + '&port=' + this.input.port + "&dark=" + this.dark;
-      this.iframe = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=500 height=195 scrolling=no src="' + this.link + '"></iframe>';
+      this.link = '//' + window.location.host + '/iframe.html?ip=' + this.input.ip + '&port=' + this.input.port + "&dark=" + this.dark+'&time='+(new Date()).valueOf();
+      this.iframe = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="'+ this.width +'" height="'+ this.height +'" scrolling=no src="' + this.link + '"></iframe>';
     },
     async update(ip = null, port = null) {
       this.loading = true;

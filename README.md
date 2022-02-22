@@ -1,8 +1,7 @@
-# mcbe_motd
+# MCBE MOTD Frontend
 
 ## Project details
 See backend repo: [BlackBEDevelopment/MCBE-Server-Motd](https://github.com/BlackBEDevelopment/MCBE-Server-Motd)
-
 
 ## Project setup
 ```
