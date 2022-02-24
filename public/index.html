@@ -113,7 +113,7 @@
                 }
             });
         document.addEventListener(tap, function(e) {
-          if(e.target.nodeName !== 'SPAN'){
+          if(e.target.nodeName !== 'SPAN' && e.target.nodeName !== 'BUTTON'){
             "sidebar" !== e.target.id && "toggle-sidebar" !== e.target.id && "A" !== e.target.nodeName && "IMG" !== e.target.nodeName && (render.play(), updateCoords(e), animateParticules(pointerX, pointerY))
           }
         }, !1), setCanvasSize(), window.addEventListener("resize", setCanvasSize, !1)
