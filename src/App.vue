@@ -31,7 +31,7 @@
               sm="12"
               xl="6"
           >
-            <server-info class="elevation-2" v-bind:loading="loading" v-bind:query_data="data"></server-info>
+            <server-info class="elevation-2" v-bind:loading="loading" v-bind:query_data="data" join_open></server-info>
           </v-col>
           <v-col cols="12"></v-col>
           <v-col
@@ -120,7 +120,11 @@
                         this.dark = !this.dark;
                       }">切换主题
                       </v-btn>
-                      <v-btn class="primary" v-on:click="copyLink">一键复制代码</v-btn>
+                      <v-btn :class="{'secondary': open_join}" v-on:click="open_join = !open_join">
+                        <template v-if="open_join">关闭一键添加</template>
+                        <template v-else>开启一键添加</template>
+                      </v-btn>
+                      <v-btn class="ml-2 primary" v-on:click="copyLink">一键复制代码</v-btn>
                     </v-col>
                     <v-col class="mt-2" cols="12">
                       <v-textarea
@@ -130,7 +134,7 @@
                           rows="3"
                       ></v-textarea>
                       <div v-if="$vuetify.breakpoint.mdAndUp" class="elevation-2 mb-5 grey pa-3 text-center">
-                        <iframe :src="link + '&demo=true'" border="0" frameborder="no" :height="height" marginheight="0" marginwidth="0"
+                        <iframe :src="link + '&demo=true&time='+(new Date()).valueOf()" border="0" frameborder="no" :height="height" marginheight="0" marginwidth="0"
                                 scrolling=no :width="width"></iframe>
                       </div>
                     </v-col>
@@ -178,7 +182,8 @@ export default {
     link: '/iframe.html?ip=play.easecation.net&port=19132',
     dark: false,
     snackbar: false,
-    text: '复制成功'
+    text: '复制成功',
+    open_join: false
   }),
   created() {
     let dark = false;
@@ -221,6 +226,9 @@ export default {
     },
     dark() {
       this.refreshIframe();
+    },
+    open_join(){
+      this.refreshIframe();
     }
   },
   methods: {
@@ -228,7 +236,10 @@ export default {
       return await axios.get('/api?host=' + ip + ":" + port);
     },
     refreshIframe() {
-      this.link = '//' + window.location.host + '/iframe.html?ip=' + this.input.ip + '&port=' + this.input.port + "&dark=" + this.dark+'&time='+(new Date()).valueOf();
+      this.link = '//' + window.location.host + '/iframe.html?ip=' + this.input.ip + '&port=' + this.input.port + "&dark=" + this.dark;
+      if(this.open_join){
+        this.link = this.link+'&join_open=true'
+      }
       this.iframe = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="'+ this.width +'" height="'+ this.height +'" scrolling=no src="' + this.link + '"></iframe>';
     },
     async update(ip = null, port = null) {

@@ -4,7 +4,7 @@
       <div v-if="error" class="text-center pt-4">
         <h1>服务器不在线</h1>
       </div>
-      <server-info v-else :query_data="data" v-bind:loading="loading"></server-info>
+      <server-info v-else :query_data="data" v-bind:loading="loading" v-bind:join_open="join_open"></server-info>
       <v-fade-transition v-if="demo">
         <v-overlay
             absolute
@@ -36,13 +36,15 @@ export default {
       port: null
     },
     loading: true,
-    demo: false
+    demo: false,
+    join_open: false
   }),
   created() {
     let ip = router.currentRoute.query.ip;
     let port = router.currentRoute.query.port;
     let dark = router.currentRoute.query.dark;
     let demo = router.currentRoute.query.demo;
+    let join_open = router.currentRoute.query.join_open;
     if (ip === undefined || port === undefined || ip === null || port === null) {
       this.error = true;
     } else {
@@ -51,6 +53,9 @@ export default {
     }
     if (demo !== undefined && demo !== null) {
       this.demo = true;
+    }
+    if (join_open !== undefined && join_open !== null) {
+      this.join_open = true;
     }
     if (dark === undefined || dark === null) {
       console.log(dark)

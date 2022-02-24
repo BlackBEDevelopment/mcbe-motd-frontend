@@ -2,52 +2,57 @@
   <div id="server-info">
     <v-card :disabled="loading" :loading="loading" elevation="0">
       <v-card-text>
-        <v-container fluid>
-          <v-row>
-            <div class="d-flex">
-              <v-card elevation="0" height="80">
-                <v-img
-                    v-if="this.query_data == null || this.query_data.status !== true"
-                    :aspect-ratio="1"
-                    lazy-src="@/assets/img_5.png"
-                    src="@/assets/img_5.png"
-                    width="80"
-                ></v-img>
-                <v-img
-                    v-else
-                    :aspect-ratio="1"
-                    lazy-src="@/assets/img_4.png"
-                    src="@/assets/img_4.png"
-                    width="80"
-                ></v-img>
-              </v-card>
-              <div v-if="this.loading !== true && this.query_data !== null && this.query_data.status === true"
-                   class="ml-4">
-                <h2 class="title" v-html="text_format(this.query_data.motd)"></h2>
-                <div class="text-subtitle-1">
-                  <v-icon size="16">mdi-server</v-icon>
-                  {{ this.query_data.host }}
-                </div>
-                <div class="text-subtitle-2">
-                  <v-icon size="16">mdi-gamepad</v-icon>
-                  MCBE: {{ this.query_data.version }} | Protocol: {{ this.query_data.agreement }}
-                </div>
-              </div>
-              <div v-else-if="loading === true" class="ml-4">
-                <h2 class="title">正在加载</h2>
-                <div class="text-subtitle-1">
-                  如果迟迟不响应，请刷新页面重试，也许是🐱的api炸了呢
-                </div>
-              </div>
-              <div v-else class="ml-4">
-                <h2 class="title">当前服务器离线</h2>
-                <div class="text-subtitle-2">
-                  所谓的携手共进不就是这样吗？如果平坦的道理上只有一个人的宽度，那么我会很开心地走上长满荆棘的道路。 --- 樱小路露娜
-                </div>
-              </div>
-
+        <div class="d-flex">
+          <v-card elevation="0" height="80">
+            <v-img
+                v-if="this.query_data == null || this.query_data.status !== true"
+                :aspect-ratio="1"
+                lazy-src="@/assets/img_5.png"
+                src="@/assets/img_5.png"
+                width="80"
+            ></v-img>
+            <v-img
+                v-else
+                :aspect-ratio="1"
+                lazy-src="@/assets/img_4.png"
+                src="@/assets/img_4.png"
+                width="80"
+            ></v-img>
+          </v-card>
+          <div v-if="this.loading !== true && this.query_data !== null && this.query_data.status === true"
+               class="ml-4">
+            <h2 class="title" v-html="text_format(this.query_data.motd)"></h2>
+            <div class="text-subtitle-1">
+              <v-icon size="16">mdi-server</v-icon>
+              {{ this.query_data.host }}
             </div>
-          </v-row>
+            <div class="text-subtitle-2">
+              <v-icon size="16">mdi-gamepad</v-icon>
+              MCBE: {{ this.query_data.version }} | Protocol: {{ this.query_data.agreement }}
+            </div>
+          </div>
+          <div v-else-if="loading === true" class="ml-4">
+            <h2 class="title">正在加载</h2>
+            <div class="text-subtitle-1">
+              如果迟迟不响应，请刷新页面重试，也许是🐱的api炸了呢
+            </div>
+          </div>
+          <div v-else class="ml-4">
+            <h2 class="title">当前服务器离线</h2>
+            <div class="text-subtitle-2">
+              所谓的携手共进不就是这样吗？如果平坦的道理上只有一个人的宽度，那么我会很开心地走上长满荆棘的道路。 --- 樱小路露娜
+            </div>
+          </div>
+          <div
+              class="ml-auto"
+              v-if="join_open"
+          >
+            <v-btn color="primary" small elevation="0" v-on:click="dialog = true">
+              加入服务器
+            </v-btn>
+          </div>
+        </div>
+        <div class="mb-3">
           <v-row
               v-if="this.query_data !== null && this.query_data.status === true"
               class="pt-4"
@@ -115,21 +120,61 @@
               加载中
             </v-btn>
           </v-row>
-        </v-container>
+        </div>
       </v-card-text>
     </v-card>
+    <v-dialog
+        v-if="join_open"
+        v-model="dialog"
+        persistent
+        max-width="290"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          提示
+        </v-card-title>
+        <v-card-text>
+          我们将唤起本地的 MinecraftBE 客户端并自动添加服务器信息，若无法唤起请检查浏览器权限或更换浏览器。
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="dialog = false"
+          >
+            取消
+          </v-btn>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="joinServer"
+          >
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
   name: "ServerInfo",
-  data: () => ({}),
+  data: () => ({
+    dialog: false
+  }),
   props: {
     query_data: {
       type: Object | Boolean,
       default() {
         return null;
+      }
+    },
+    join_open: {
+      type: Boolean,
+      default() {
+        return false;
       }
     },
     loading: {
@@ -215,6 +260,10 @@ export default {
       }
       return result;
     },
+    joinServer(){
+      this.dialog = false;
+      window.open('minecraft:?addExternalServer='+this.query_data.motd+'|'+this.query_data.host, '_blank');
+    }
   }
 }
 </script>
