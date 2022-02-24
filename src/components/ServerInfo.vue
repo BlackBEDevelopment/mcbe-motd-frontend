@@ -28,8 +28,17 @@
             </div>
             <div class="text-subtitle-2">
               <v-icon size="16">mdi-gamepad</v-icon>
-              MCBE: {{ this.query_data.version }} | Protocol: {{ this.query_data.agreement }}
+              MCBE: {{ this.query_data.version }} |
+              <template
+                  v-if="join_open && this.$vuetify.breakpoint.smAndDown"
+              >
+                <v-btn color="primary" small class="pb-1" text elevation="0" v-on:click="dialog = true">
+                  加入服务器
+                </v-btn>
+              </template>
+              <template v-else> Protocol: {{ this.query_data.agreement }} </template>
             </div>
+
           </div>
           <div v-else-if="loading === true" class="ml-4">
             <h2 class="title">正在加载</h2>
@@ -45,7 +54,7 @@
           </div>
           <div
               class="ml-auto"
-              v-if="join_open"
+              v-if="join_open && this.$vuetify.breakpoint.mdAndUp"
           >
             <v-btn color="primary" small elevation="0" v-on:click="dialog = true">
               加入服务器

@@ -24,131 +24,99 @@
             dense
             justify="center"
         >
-          <v-col
-              cols="12"
-              lg="8"
-              md="8"
-              sm="12"
-              xl="6"
-          >
+          <col-block>
             <server-info class="elevation-2" v-bind:loading="loading" v-bind:query_data="data" join_open></server-info>
-          </v-col>
+          </col-block>
           <v-col cols="12"></v-col>
-          <v-col
-              cols="12"
-              lg="8"
-              md="8"
-              sm="12"
-              xl="6"
-          >
-            <v-card>
-              <v-card-title>
-                <span class="subtitle-1">输入服务器信息</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-row dense>
-                  <v-col cols="12" md="7">
-                    <v-text-field
-                        v-model="input.ip"
-                        clearable
-                        dense
-                        label="Server IP Address"
-                        outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col class="text-center align-center hidden-sm-and-down colon" md="1">
-                    <span>:</span>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                        v-model="input.port"
-                        clearable
-                        dense
-                        label="Server Port"
-                        outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-btn :disabled="loading" block color="primary" @click="update()">查询</v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
+          <col-block>
+            <card title="输入服务器信息">
+              <v-row dense>
+                <v-col cols="12" md="7">
+                  <v-text-field
+                      v-model="input.ip"
+                      clearable
+                      dense
+                      label="Server IP Address"
+                      outlined
+                  ></v-text-field>
+                </v-col>
+                <v-col class="text-center align-center hidden-sm-and-down colon" md="1">
+                  <span>:</span>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      v-model="input.port"
+                      clearable
+                      dense
+                      label="Server Port"
+                      outlined
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn :disabled="loading" block color="primary" @click="update()">查询</v-btn>
+                </v-col>
+              </v-row>
+            </card>
+          </col-block>
           <v-col cols="12"></v-col>
-          <v-col
-              cols="12"
-              lg="8"
-              md="8"
-              sm="12"
-              xl="6"
-          >
-            <v-card>
-              <v-card-title>
-                <span class="subtitle-1">将服务器实时状态嵌入网页</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container fluid>
-                  <v-row dense>
-                    <v-col
-                        cols="6"
-                        md="2"
-                    >
-                      <v-text-field
-                          v-model="width"
-                          dense
-                          label="Width"
-                          outlined
-                          required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="6"
-                        md="2"
-                    >
-                      <v-text-field
-                          v-model="height"
-                          dense
-                          label="Height"
-                          outlined
-                          required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col md="8">
-                      <v-btn class="mr-2" v-on:click="()=>{
+          <col-block>
+            <card title="将服务器实时状态嵌入网页">
+              <v-row dense>
+                <v-col
+                    cols="6"
+                    md="2"
+                >
+                  <v-text-field
+                      v-model="width"
+                      dense
+                      label="Width"
+                      outlined
+                      required
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                    cols="6"
+                    md="2"
+                >
+                  <v-text-field
+                      v-model="height"
+                      dense
+                      label="Height"
+                      outlined
+                      required
+                  ></v-text-field>
+                </v-col>
+                <v-col md="8" class="text-sm-center">
+                  <v-btn class="mr-2" v-on:click="()=>{
                         this.dark = !this.dark;
-                      }">切换主题
-                      </v-btn>
-                      <v-btn :class="{'secondary': open_join}" v-on:click="open_join = !open_join">
-                        <template v-if="open_join">关闭一键添加</template>
-                        <template v-else>开启一键添加</template>
-                      </v-btn>
-                      <v-btn class="ml-2 primary" v-on:click="copyLink">一键复制代码</v-btn>
-                    </v-col>
-                    <v-col class="mt-2" cols="12">
-                      <v-textarea
-                          v-model="iframe"
-                          label="代码"
-                          outlined
-                          rows="3"
-                      ></v-textarea>
-                      <div v-if="$vuetify.breakpoint.mdAndUp" class="elevation-2 mb-5 grey pa-3 text-center">
-                        <iframe :src="link + '&demo=true&time='+(new Date()).valueOf()" border="0" frameborder="no" :height="height" marginheight="0" marginwidth="0"
-                                scrolling=no :width="width"></iframe>
-                      </div>
-                    </v-col>
-                  </v-row>
-
-                </v-container>
-              </v-card-text>
-
-            </v-card>
-          </v-col>
+                      }" :dark="!this.dark">切换主题
+                  </v-btn>
+                  <v-btn :class="{'secondary': open_join}" v-on:click="open_join = !open_join">
+                    <template v-if="open_join">关闭一键添加</template>
+                    <template v-else>开启一键添加</template>
+                  </v-btn>
+                  <v-btn class="ml-2 primary" v-on:click="copyLink" v-if="$vuetify.breakpoint.mdAndUp">复制代码</v-btn>
+                </v-col>
+                <v-col class="mt-2" cols="12">
+                  <v-textarea
+                      v-model="iframe"
+                      label="代码"
+                      outlined
+                      rows="3"
+                  ></v-textarea>
+                  <v-btn class="primary" block v-on:click="copyLink" v-if="$vuetify.breakpoint.smAndDown">一键复制代码</v-btn>
+                  <div v-if="$vuetify.breakpoint.mdAndUp" class="elevation-2 mb-5 grey pa-3 text-center">
+                    <iframe :src="link + '&demo=true&time='+(new Date()).valueOf()" border="0" frameborder="no" :height="height" marginheight="0" marginwidth="0"
+                            scrolling=no :width="width"></iframe>
+                  </div>
+                </v-col>
+              </v-row>
+            </card>
+          </col-block>
         </v-row>
       </v-container>
     </v-main>
-    <app-footer></app-footer>
+    <app-footer class="pt-10"></app-footer>
   </v-app>
 </template>
 
@@ -160,10 +128,14 @@ import ServerInfo from "@/components/ServerInfo";
 import router from "@/router/index";
 import axios from 'axios';
 import History from "@/components/History";
+import ColBlock from "@/components/ColBlock";
+import Card from "@/components/Card";
 
 export default {
   name: 'App',
   components: {
+    ColBlock,
+    'card': Card,
     'app-banner': Banner,
     'app-footer': Footer,
     'server-info': ServerInfo,
@@ -212,6 +184,7 @@ export default {
     }
 
     this.refreshIframe();
+
   },
   mounted() {
     // this.loading = true;
