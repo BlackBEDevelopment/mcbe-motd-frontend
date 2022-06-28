@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "static/precache-manifest.834a764337b029fefc3d9d7892ca3749.js"
+  "static/precache-manifest.1b70fac384694e939bd7efb6fc35e528.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "mcbe_motd"});
