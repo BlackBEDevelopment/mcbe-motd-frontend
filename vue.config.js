@@ -10,7 +10,7 @@ module.exports = {
   devServer: {
     proxy: {
       '^/api': {
-        target: 'https://motdbe.blackbe.xyz',
+        target: 'https://motdbe.blackbe.work',
         ws: false,
         changeOrigin: true
       }
